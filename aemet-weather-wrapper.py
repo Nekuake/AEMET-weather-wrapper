@@ -1,6 +1,6 @@
 import requests
 import pprint
-
+import weather_config as cfg
 
 global api_key=null
 
