@@ -29,9 +29,9 @@ def external_help():  #Downloads and shows AEMET's OpenData JSON
 	r=requests.get("https://opendata.aemet.es/AEMET_OpenData_specification.json")
 	
 
-def get_Forecast(city_code):  #It's better to use this way to get the forecast.
-
-	return forecast
+def get_Forecast_Daily(city_code):  #It's better to use this way to get the forecast.
+	r=requests.get("https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/diaria/" + str(city_code), headers={"api_key": cfg.api_key})
+	print (r.text)
 
 
 class Forecast:
@@ -40,6 +40,8 @@ class Forecast:
 		self.city_code=city_code
 		self.days=days
 
+	def __init__(self, city_code):
+		self.city_code=city_code
 	@classmethod
 	def refresh_forecast(self):
 		pass
