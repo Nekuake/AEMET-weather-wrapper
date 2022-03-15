@@ -1,5 +1,5 @@
 import requests
-import pprint
+import json
 import weather_config as cfg
 
 
@@ -31,6 +31,8 @@ def external_help():  #Downloads and shows AEMET's OpenData JSON
 
 def get_Forecast_Daily(city_code):  #It's better to use this way to get the forecast.
 	r=requests.get("https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/diaria/" + str(city_code), headers={"api_key": cfg.api_key})
+	DataJsonURL=json.loads(r.text)
+	DataJsonURL=DataJsonURL.get["datos"]
 	print (r.text)
 
 
