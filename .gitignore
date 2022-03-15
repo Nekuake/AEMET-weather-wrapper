@@ -1,1 +1,9 @@
 *config.py
+
+.idea/inspectionProfiles/
+
+*.iml
+
+.idea/
+
+__pycache__/
