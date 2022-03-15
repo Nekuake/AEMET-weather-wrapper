@@ -29,6 +29,9 @@ def external_help():  #Downloads and shows AEMET's OpenData JSON
 	r=requests.get("https://opendata.aemet.es/AEMET_OpenData_specification.json")
 	
 
+def get_Forecast(city_code):  #It's better to use this way to get the forecast.
+
+	return forecast
 
 
 class Forecast:
@@ -40,5 +43,5 @@ class Forecast:
 	@classmethod
 	def refresh_forecast(self):
 		pass
-		
+
 
