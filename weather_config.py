@@ -5,7 +5,7 @@ api_key = ""
 """
 Translating AEMET's status_weather_codes to something more readable, with description. It will be a big dictionary
 but I hope it's more useful. Descriptions are based on https://www.aemet.es/es/eltiempo/prediccion/espana/ayuda.
-You can get the AEMET's values scrapping all the pngs contained in https://www.aemet.es/imagenes/png/estado_cielo/
+You can get the AEMET's values scrapping all the pngs contained in https://www.aemet.es/imagenes/png/estado_cielo/. No API Key needed.
 i.e.:
 for x in range(0,99):
     r = requests.get("https://www.aemet.es/imagenes/png/estado_cielo/" + str(x) +".png", stream=True)
@@ -108,4 +108,7 @@ status_weather_codes = {
            "description": "mist"},
     "83": {"value": 99,
            "description": "haze"},
+    "" :{"value": 0,
+         "description":"No data"}
 }
+
