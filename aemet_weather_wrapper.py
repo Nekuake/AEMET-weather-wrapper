@@ -32,13 +32,13 @@ def get_forecast_daily_from_code(city_code):  # It's better to use this way to g
                      headers={"api_key": cfg.api_key})
     data_json_url = json.loads(r.text)
     response_dict = json.loads(requests.get(data_json_url.get("datos")).text)
-    update_time = datetime.strptime(response_dict[0].get("elaborado"), "%Y-%m-%dT%H:%M:%S")
+    update_time = datetime.strptime(response_dict[0]("elaborado"), "%Y-%m-%dT%H:%M:%S")
     sections = {}
     # Here I thought it would be better to have a more graphical approach, avoiding for loops and showing how the
     # AEMET API delivers the data. It may look clunkier and I'm open to change it.
-    for x in len(response_dict[0].get("prediccion").get("dia")):
-        for x in len(response_dict[0].get("prediccion").get("dia"):
-        	pass
+    for x in len(response_dict[0]("prediccion")("dia")):
+        sections[(response_dict[0]("prediccion")[x]("fecha")).removesuffix("T00:00:00")]
+
     new_forecast = Forecast(response_dict.get("nombre"), city_code, True, update_time, sections)
     return new_forecast
 
