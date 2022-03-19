@@ -2,11 +2,12 @@ import requests
 import json
 import weather_config as cfg
 from datetime import datetime
+import os
 
 
 def config(new_api_key):
     if check_connection(new_api_key):
-        cfg.api_key = new_api_key
+        os.environ["AEMET_APIKEY"] = new_api_key
 
 
 def check_connection(api_key):
@@ -27,8 +28,10 @@ def external_help():  # Downloads and shows AEMET's OpenData JSON. No API Key ne
 
 
 def get_forecast_daily_from_code(city_code):  # It's better to use this way to get the forecast.
+    if os.getenv("AEMET_APIKEY")==None:
+        raise Exception("No API Key saved. Please run 'config(API_KEY)'")
     r = requests.get("https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/diaria/" + str(city_code),
-                     headers={"api_key": cfg.api_key})
+                     headers={"api_key": os.getenv("AEMET_APIKEY")})
 
     data_json_url = json.loads(r.text)
     response_dict = json.loads(requests.get(data_json_url.get("datos")).text)
@@ -98,6 +101,5 @@ class Forecast:
     @classmethod
     def refresh_forecast(self):
         get_forecast_daily_from_code(self.city_code)
-
 
 

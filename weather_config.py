@@ -1,7 +1,3 @@
-# Add the key for the OpenData API. Please note that this file is included in the gitignore but double-check whenever
-# you share, push or work with these files.
-
-api_key = ""
 """
 Translating AEMET's status_weather_codes to something more readable, with description. It will be a big dictionary
 but I hope it's more useful. Descriptions are based on https://www.aemet.es/es/eltiempo/prediccion/espana/ayuda.
@@ -17,7 +13,7 @@ My approach for the values divides the tens and units this way:
 
 #################################################################
                         Tens        Units
-    no rain	                1	    1	    cloudy intervals
+    no rain                 1	    1	    cloudy intervals
     light rain	            2	    2	    cloudy
     rain	                3	    3	    very cloudy
     light snowfall	        4	    4	    overcast
