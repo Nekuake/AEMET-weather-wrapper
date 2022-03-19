@@ -3,3 +3,6 @@ from aemet_weather_wrapper import get_code_from_name, get_forecast_daily_from_co
 
 def test_from_code():
     print("placeholder test")
+
+
+test_from_code()

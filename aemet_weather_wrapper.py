@@ -100,6 +100,4 @@ class Forecast:
         get_forecast_daily_from_code(self.city_code)
 
 
-get_forecast_daily_from_code(get_code_from_name("Alfaro")["Alfaro"])
-
 
