@@ -19,7 +19,7 @@ def check_connection(api_key):
             print("API Key and connection OK")
             return True
         else:
-            raise Exception("Request returned" + str(r.status_code))
+            raise Exception("Request returned: " + str(r.status_code))
 
 
 def external_help():  # Downloads and shows AEMET's OpenData JSON. No API Key needed.
@@ -101,5 +101,4 @@ class Forecast:
     @classmethod
     def refresh_forecast(self):
         get_forecast_daily_from_code(self.city_code)
-
 
