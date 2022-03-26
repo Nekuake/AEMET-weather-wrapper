@@ -72,7 +72,7 @@ def get_forecast_daily_from_code(city_code):  # It's better to use this way to g
                 sections[aux_date]["00-24"]["wind_gusts"] = period["value"]
         for period in (day["viento"]):
             try:
-                sections[aux_date][period["periodo"]]["wind_gusts"] = {"direction": period["direccion"],
+                sections[aux_date][period["periodo"]]["wind"] = {"direction": period["direccion"],
                                                                        "speed": period["velocidad"]}
             except KeyError:
                 sections[aux_date]["00-24"]["wind_gusts"] = {"direction": period["direccion"],
@@ -109,3 +109,6 @@ class Forecast:
     @classmethod
     def refresh_forecast(self):
         get_forecast_daily_from_code(self.city_code)
+
+print (get_forecast_daily_from_code(26071))
+print("hewo")
