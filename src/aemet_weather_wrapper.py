@@ -1,11 +1,12 @@
 import requests
 import json
-import weather_config as cfg
+import src.weather_config as cfg
 from datetime import datetime
+import pprint
 import os
 
 
-def config(new_api_key):
+def config_aemet_key(new_api_key):
     if check_connection(new_api_key):
         os.environ["AEMET_APIKEY"] = new_api_key
 
@@ -28,11 +29,13 @@ def external_help():  # Downloads and shows AEMET's OpenData JSON. No API Key ne
 
 
 def get_forecast_daily_from_code(city_code):  # It's better to use this way to get the forecast.
-    if os.getenv("AEMET_APIKEY")==None:
+    if os.getenv("AEMET_APIKEY") == None:
         raise Exception("No API Key saved. Please run 'config(API_KEY)'")
     r = requests.get("https://opendata.aemet.es/opendata/api/prediccion/especifica/municipio/diaria/" + str(city_code),
                      headers={"api_key": os.getenv("AEMET_APIKEY")})
-
+    if not r.status_code == 200:
+        raise Exception("HTTP Response code not 200: " + r.status_code)
+    print(r)
     data_json_url = json.loads(r.text)
     response_dict = json.loads(requests.get(data_json_url.get("datos")).text)
     update_time = datetime.strptime(response_dict[0]["elaborado"], "%Y-%m-%dT%H:%M:%S")
@@ -70,25 +73,30 @@ def get_forecast_daily_from_code(city_code):  # It's better to use this way to g
         for period in (day["viento"]):
             try:
                 sections[aux_date][period["periodo"]]["wind_gusts"] = {"direction": period["direccion"],
-                                                                    "speed": period["velocidad"]}
+                                                                       "speed": period["velocidad"]}
             except KeyError:
                 sections[aux_date]["00-24"]["wind_gusts"] = {"direction": period["direccion"],
-                                                                       "speed": period["velocidad"]}
+                                                             "speed": period["velocidad"]}
+        sections[aux_date]["00-24"]["temperature"] = {"min": day["temperatura"]["minima"],
+                                                      "max": day["temperatura"]["maxima"]}
     new_forecast = Forecast(response_dict[0]["nombre"], city_code, True, update_time, sections)
     return new_forecast
 
 
-def get_code_from_name(city_name):  #This is not the ideal way to get the forecast. I would recommend getting it by code
-    response_dict=json.loads(requests.get("https://opendata.aemet.es/opendata/api/maestro/municipios", headers={"api_key" : cfg.api_key}).text)
+def get_code_from_name(city_name):  # This is not the ideal way to get the forecast. I would recommend getting the
+    # code and then storing it.
+    response_dict = json.loads(requests.get("https://opendata.aemet.es/opendata/api/maestro/municipios",
+                                            headers={"api_key": cfg.api_key}).text)
     search = list(filter(lambda city: city['nombre'] == city_name, response_dict))
-    if(len(search)>1):
+    if (len(search) > 1):
         raise Warning("More than one match. Returning all matches as list.")
     matches = {}
     for results in search:
         matches[results["nombre"]] = {}
-        matches[results["nombre"]]=results["id"].removeprefix("id")  #This was introduced in Python 3.9
+        matches[results["nombre"]] = results["id"].removeprefix("id")  # This was introduced in Python 3.9
     print(matches)
     return matches
+
 
 class Forecast:
     def __init__(self, city_name, city_code, is_daily, update_time, sections):
@@ -101,4 +109,3 @@ class Forecast:
     @classmethod
     def refresh_forecast(self):
         get_forecast_daily_from_code(self.city_code)
-
